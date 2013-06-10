@@ -28,7 +28,7 @@ Another bash script for the same purpose can be found [here]()
 
 ### Usage
 
-    Usage: pyngwallper [OPTIONS]
+    Usage: pyngwallper [OPTIONS] [URL]
     Download the wallpaper offered by National Geographic photography website and set it current wallpaper background.
 
     -f, --force                 adopt this photo even if its size may
@@ -53,6 +53,8 @@ Another bash script for the same purpose can be found [here]()
     -t, --output-folder         specify the folder to store photos.
                                 Use '~/Pictures' folder in Linux or 
                                 'My Pictures' in Windows by default
+    URL                         starts with this URL instead of today's
+                                photo
     
 
 ----------
