@@ -6,10 +6,12 @@ from os.path import expanduser, join as pathjoin, isdir, splitext, basename
 import log
 import webutil
 import ngphoto
+import record
 
 NAME = 'pyngwallpaper'
 REV  = '1.0.0'
 LINK = 'https://github.com/genzj/pyngwallpaper'
+HISTORY_FILE = pathjoin(expanduser('~'), 'ng-wallpaper-history.json')
 
 _logger = log.getChild('main')
 
@@ -87,14 +89,25 @@ def download_wallpaper(config):
         if not s.loaded():
             _logger.fatal('can not load url %s. aborting...', s.url)
             sysexit(1)
+        if not s.isphoto():
+            _logger.fatal('%s is not a valid NG photo page.', s.url)
+            sysexit(1)
         wplink = s.wallpaper_link()
-        # TODO file download history check
         if wplink:
             outfile = get_output_filename(config, wplink)
+            rec = record.default_manager.get(wplink, None)
+
+            if rec and outfile == rec['local_file']:
+                _logger.info('file has been downloaded before, exit')
+                sysexit(0)
+                return None
+
             with open(outfile, 'wb') as of:
+                _logger.info('download photo of "%s"', s.title())
                 of.write(webutil.loadurl(s.wallpaper_link()))
             _logger.info('file saved %s', outfile)
-            return outfile
+            r = record.DownloadRecord(wplink, outfile)
+            return r
         p -= 1
         if p <= 0:
             _logger.info('bad luck, no wallpaper today:(')
@@ -109,6 +122,28 @@ def get_output_filename(config, link):
         filename = 'wallpaper{}'.format(splitext(filename)[1])
     return pathjoin(config.output_folder, filename)
 
+def load_history():
+    try:
+        f = open(HISTORY_FILE, 'r')
+    except Exception:
+        _logger.warning('error occurs when recover downloading history', exc_info=1)
+    else:
+        record.default_manager.load(f)
+        f.close()
+
+def save_history(r, keepold=False):
+    if not keepold:
+        record.default_manager.clear()
+    record.default_manager.add(r)
+    try:
+        f = open(HISTORY_FILE, 'w')
+        f.truncate(0)
+    except Exception:
+        _logger.warning('error occurs when recover downloading history', exc_info=1)
+    else:
+        record.default_manager.save(f)
+        f.close()
+
 
 if __name__ == '__main__':
     config = parseargs(argv[1:])
@@ -118,9 +153,14 @@ if __name__ == '__main__':
         log._logger.setLevel(log.DEBUG)
         ngphoto._logger.setLevel(log.DEBUG)
     _logger.debug(config)
+
     prepare_output_dir(config.output_folder)
-    filename = download_wallpaper(config)
-    if not filename or config.setter == 'no':
+
+    load_history()
+    filerecord = download_wallpaper(config)
+
+    save_history(filerecord)
+    if not filerecord or config.setter == 'no':
         _logger.info('nothing to set')
     else:
         pass #set wallpaper
