@@ -47,7 +47,7 @@ def loadurl(url, headers={}):
         _logger.debug("Hit %s %d", str(con), con.getcode())
         data = con.read(-1)
         data = _ungzip(data)
-        _logger.debug(repr(data))
+        _logger.log(log.PAGEDUMP, repr(data))
         return data
     else:
         _logger.error("No data returned.")
@@ -78,7 +78,7 @@ def postto(url, datadict, headers={}, decodec='gbk'):
         _logger.exception(ex)
 
 if __name__ == '__main__':
-    _logger.setLevel(log.DEBUG)
+    _logger.setLevel(log.PAGEDUMP)
     _logger.info('try loading a paage')
     c = loadpage('http://ifconfig.me/all', headers={'User-Agent':'curl'})
     _logger.info('page content: \n%s', c)
