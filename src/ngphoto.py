@@ -42,8 +42,8 @@ class NgPhotoPage:
         prev_pat = re.compile(r'<a[^>]+href="([^"]+)"[^>]*title="[^"]+previous[^"]+"[^>]*>')
         img_pat = re.compile(r'<img[^>]+src="([^"]+)"[^>]*alt="([^"]+)"')
 
-        prevs = prev_pat.findall(s.content[image_offset:])
-        imgs = img_pat.findall(s.content[image_offset:])
+        prevs = prev_pat.findall(self.content[image_offset:])
+        imgs = img_pat.findall(self.content[image_offset:])
 
         if not prevs or not imgs:
             _logger.warn('no prev or no imgs: %s, %s', prevs, imgs)
@@ -54,7 +54,7 @@ class NgPhotoPage:
         wp_pat = re.compile(r'<div[^>]+class="download_link"[^>]*>\s*<a[^>]+href="([^"]+)"[^>]*>\w*\s*Wallpaper')
         wpl = wp_pat.findall(self.content)
         if not wpl:
-            _logger.info('wallpaper link not found')
+            _logger.debug('wallpaper link not found')
             self.__wallpaper_link = None
         else:
             self.__wallpaper_link = wpl[0]
@@ -121,10 +121,10 @@ if __name__ == '__main__':
     _logger.setLevel = log.DEBUG
     s = NgPhotoPage(argv[1])
     while True:
-        _logger.info(repr(s))
-        _logger.info(str(s))
+        _logger.debug(repr(s))
+        _logger.debug(str(s))
         s.load()
-        _logger.info(str(s))
+        _logger.debug(str(s))
         if s.wallpaper_link():
             with open('w.jpg', 'wb') as of:
                 of.write(webutil.loadurl(s.wallpaper_link()))
@@ -133,5 +133,5 @@ if __name__ == '__main__':
         if p <= 0:
             _logger('bad luck, no wallpaper this week:(')
             break
-        _logger.info('no wallpaper, try previous')
+        _logger.debug('no wallpaper, try previous')
         s.update(s.prev_link())
