@@ -2,16 +2,19 @@
 import logging
 from logging import CRITICAL, ERROR, WARNING, INFO, DEBUG
 
+PAGEDUMP = 5
+logging.addLevelName(PAGEDUMP, 'PAGEDUMP')
+
 _logger = None
 def __init(projname):
     global _logger
     _logger = logging.getLogger(projname)
     if not _logger.handlers:
         _loggerHandler = logging.StreamHandler()
-        _loggerHandler.setLevel(logging.DEBUG)
+        _loggerHandler.setLevel(PAGEDUMP)
         _loggerHandler.setFormatter(logging.Formatter('[%(asctime)s - %(levelname)s - %(module)s] %(message)s'))
         _logger.addHandler(_loggerHandler)
-        _logger.setLevel(logging.INFO)
+        _logger.setLevel(PAGEDUMP)
 
 def getChild(*args, **kwargs):
     return _logger.getChild(*args, **kwargs)
