@@ -117,9 +117,21 @@ class NgPhotoPage:
 
 from sys import argv
 if __name__ == '__main__':
+    p = 5
     _logger.setLevel = log.DEBUG
     s = NgPhotoPage(argv[1])
-    _logger.info(repr(s))
-    _logger.info(str(s))
-    s.load()
-    _logger.info(str(s))
+    while True:
+        _logger.info(repr(s))
+        _logger.info(str(s))
+        s.load()
+        _logger.info(str(s))
+        if s.wallpaper_link():
+            with open('w.jpg', 'wb') as of:
+                of.write(webutil.loadurl(s.wallpaper_link()))
+            break
+        p -= 1
+        if p <= 0:
+            _logger('bad luck, no wallpaper this week:(')
+            break
+        _logger.info('no wallpaper, try previous')
+        s.update(s.prev_link())
