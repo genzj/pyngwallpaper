@@ -10,12 +10,12 @@ Another bash script for the same purpose can be found [here](https://github.com/
 
 ### How it works
 
-1.  Read and parse National Geographic photography *photo-of-today* [website](http://photography.nationalgeographic.com/photography/photo-of-the-day/)
+1.  Read and parse National Geographic photography *Photo of Today* [website](http://photography.nationalgeographic.com/photography/photo-of-the-day/)
 
 1.  If there is a wallpaper download link:
-    * if it's same as last downloaded photo, exit
-    * download it to **specified** folder and overwrite last downloaded photo
-    * record the downloading URL in a text file, which locates in current user's personal folder
+    * if both its URL and target file name are same as last downloaded photo's, exit without error
+    * download it to **specified** folder
+    * record the downloading URL, location of saved photo and downloading time in a text file, which locates in current user's personal folder
     * use it as wallpaper unless in **download-only** mode
     * exit
 
