@@ -8,7 +8,7 @@ Another bash script for the same purpose can be found [here]()
 
 ----------
 
-### How does it work
+### How it works
 
 1.  Read and parse National Geographic photography *photo-of-today* [website](http://photography.nationalgeographic.com/photography/photo-of-the-day/)
 
