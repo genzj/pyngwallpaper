@@ -38,6 +38,12 @@ def parseargs(args):
             help='''adopt this photo even if its size may
                     be strange to be wallpaper. Disabled by
                     default''')
+    parser.add_argument('--redownload', default=False,
+            action='store_true',
+            help='''do not consider history records. Download
+                    must be done. But this download will
+                    be recorded in history file.
+            ''')
     parser.add_argument('-k', '--keep-file-name', default=False,
             action='store_true',
             help='''keep the original filename. By default
@@ -103,9 +109,12 @@ def download_wallpaper(config):
             rec = record.default_manager.get(wplink, None)
 
             if rec and outfile == rec['local_file']:
-                _logger.info('file has been downloaded before, exit')
-                sysexit(0)
-                return None
+                if not config.redownload:
+                    _logger.info('file has been downloaded before, exit')
+                    sysexit(0)
+                    return None
+                else:
+                    _logger.info('file has been downloaded before, redownload it')
 
             with open(outfile, 'wb') as of:
                 _logger.info('download photo of "%s"', s.title())
