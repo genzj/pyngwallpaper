@@ -29,9 +29,10 @@ def parseargs(args):
     parser.add_argument('-v', '--version', action='version',
             version='%(prog)s-{} ({})'.format(REV, LINK),
             help='show version information')
-    parser.add_argument('-d', '--debug', default=False,
-            action='store_true',
-            help='enable debug outputs')
+    parser.add_argument('-d', '--debug', default=0,
+            action='count',
+            help='''enable debug outputs. 
+            The more --debug the more detailed the log will be''')
     parser.add_argument('-f', '--force', default=False,
             action='store_true',
             help='''adopt this photo even if its size may
@@ -148,14 +149,22 @@ def save_history(r, keepold=False):
         record.default_manager.save(f)
         f.close()
 
+def set_debug_details(level):
+    if not level:
+        l = log.INFO
+    elif level == 1:
+        l = log.DEBUG
+    elif level >= 2:
+        l = log.PAGEDUMP
+    _logger.setLevel(l)
+    webutil._logger.setLevel(l)
+    log._logger.setLevel(l)
+    ngphoto._logger.setLevel(l)
+
 
 if __name__ == '__main__':
     config = parseargs(argv[1:])
-    if config.debug:
-        _logger.setLevel(log.DEBUG)
-        webutil._logger.setLevel(log.DEBUG)
-        log._logger.setLevel(log.DEBUG)
-        ngphoto._logger.setLevel(log.DEBUG)
+    set_debug_details(config.debug)
     _logger.debug(config)
 
     prepare_output_dir(config.output_folder)
