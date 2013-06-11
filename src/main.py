@@ -2,7 +2,8 @@
 import argparse
 from sys import argv, exit as sysexit, platform
 import os
-from os.path import expanduser, join as pathjoin, isdir, splitext, basename, dirname
+from os.path import expanduser, join as pathjoin, isdir, splitext
+from os.path import basename, dirname, abspath
 import log
 import webutil
 import ngphoto
@@ -178,7 +179,7 @@ if __name__ == '__main__':
     set_debug_details(config.debug)
     _logger.debug(config)
 
-    setter.load_ext_setters(dirname(__file__))
+    setter.load_ext_setters(dirname(abspath(argv[0])))
 
     prepare_output_dir(config.output_folder)
 
