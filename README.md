@@ -24,7 +24,9 @@ then *add* a startup program with:
 You can also append arguments in *Command* box.
 
 #### Windows
-TBD
+Download [NgWallpaper-win32_1.0.0 here](https://dl.dropboxusercontent.com/u/7095697/Releases/PyNgWallpaper-win32/NgWallpaper_1.0.0.exe) and unarchive it. A shortcut will be created in your startup folder if installed successfully. 
+
+You can also create a shortcut by yourself, or add arguments to it.
 
 ----------
 
