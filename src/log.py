@@ -14,7 +14,7 @@ def __init(projname):
         _loggerHandler.setLevel(PAGEDUMP)
         _loggerHandler.setFormatter(logging.Formatter('[%(asctime)s - %(levelname)s - %(module)s] %(message)s'))
         _logger.addHandler(_loggerHandler)
-        _logger.setLevel(PAGEDUMP)
+        _logger.setLevel(INFO)
 
 def getChild(*args, **kwargs):
     return _logger.getChild(*args, **kwargs)
