@@ -2,6 +2,7 @@
 import log
 import json
 import time
+import datetime
 from os.path import isfile
 from collections import UserDict
 
@@ -12,12 +13,12 @@ class DownloadRecord(dict):
     def __init__(self, url, local_file, download_time=None):
         UserDict.__init__(self)
         if download_time is None:
-            download_time = time.localtime()
-        timestr = time.strftime('%Y-%m-%dT%H:%M:%S%z', download_time)
+            download_time = datetime.datetime.fromtimestamp(time.time())
+        timestr = download_time.isoformat()
 
         self['url'] = url
         self['local_file'] = local_file
-        self['time'] = timestr[:-2]+':'+timestr[-2:]
+        self['time'] = timestr
 
 class DownloadRecordManager(dict):
     def __init__(self, name):
@@ -30,7 +31,11 @@ class DownloadRecordManager(dict):
 
     def load(self, f):
         self.clear()
-        content = json.load(f)
+        try:
+            content = json.load(f)
+        except:
+            _logger.warning('error occurs when load json file', exc_info=1)
+            return
         _logger.debug('json file loaded:\n%s', str(content))
         for r in content.values():
             try:
