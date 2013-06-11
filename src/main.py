@@ -93,6 +93,10 @@ def download_wallpaper(config):
             _logger.fatal('%s is not a valid NG photo page.', s.url)
             sysexit(1)
         wplink = s.wallpaper_link()
+        if not wplink and config.force:
+            _logger.info('in force mode')
+            wplink = s.img_link()
+
         if wplink:
             outfile = get_output_filename(config, wplink)
             rec = record.default_manager.get(wplink, None)
@@ -104,7 +108,7 @@ def download_wallpaper(config):
 
             with open(outfile, 'wb') as of:
                 _logger.info('download photo of "%s"', s.title())
-                of.write(webutil.loadurl(s.wallpaper_link()))
+                of.write(webutil.loadurl(wplink))
             _logger.info('file saved %s', outfile)
             r = record.DownloadRecord(wplink, outfile)
             return r
