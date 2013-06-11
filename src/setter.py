@@ -2,6 +2,9 @@
 import log
 import sys
 import subprocess
+import os.path
+import glob
+from importlib import import_module
 
 loglevel = log.INFO
 
@@ -12,9 +15,6 @@ class WallpaperSetter:
 
     def set(self, path, args):
         raise NotImplementedError()
-
-class RegisterWallpaperSetter(WallpaperSetter):
-    pass
 
 class ShellWallpaperSetter(WallpaperSetter):
     TIMEOUT_SEC = 5
@@ -75,6 +75,20 @@ class WallpaperSetterFactory:
                     'unregistered setter {}'.format(name))
         return self.registered[name]
 
+def load_ext_setters(path):
+    logger = log.getChild('load_ext_setters')
+    logger.setLevel(loglevel)
+    for i in glob.iglob(os.path.join(path, '*setter.py')):
+        if os.path.basename(i) == 'setter.py': continue
+        logger.debug('"%s" seems like a setter', i)
+        name, ext = os.path.splitext(os.path.basename(i))
+        try:
+            logger.debug('loading %s', name)
+            import_module(name)
+        except:
+            logger.warning('cannot loading setter %s', name, exc_info=1)
+
+
 _default_wallpaper_factory = WallpaperSetterFactory('default')
 
 register = _default_wallpaper_factory.register
@@ -83,5 +97,3 @@ get = _default_wallpaper_factory.get
 if sys.platform == 'linux':
     register('gnome2', Gnome2Setter)
     register('gnome3', Gnome3Setter)
-if sys.platform == 'win32':
-    pass

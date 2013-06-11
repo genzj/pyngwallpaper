@@ -2,7 +2,7 @@
 import argparse
 from sys import argv, exit as sysexit, platform
 import os
-from os.path import expanduser, join as pathjoin, isdir, splitext, basename
+from os.path import expanduser, join as pathjoin, isdir, splitext, basename, dirname
 import log
 import webutil
 import ngphoto
@@ -177,6 +177,8 @@ if __name__ == '__main__':
     config = parseargs(argv[1:])
     set_debug_details(config.debug)
     _logger.debug(config)
+
+    setter.load_ext_setters(dirname(__file__))
 
     prepare_output_dir(config.output_folder)
 
