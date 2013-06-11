@@ -7,6 +7,7 @@ import log
 import webutil
 import ngphoto
 import record
+import setter
 
 NAME = 'pyngwallpaper'
 REV  = '1.0.0'
@@ -169,6 +170,7 @@ def set_debug_details(level):
     webutil._logger.setLevel(l)
     log._logger.setLevel(l)
     ngphoto._logger.setLevel(l)
+    setter.loglevel = l
 
 
 if __name__ == '__main__':
@@ -185,5 +187,8 @@ if __name__ == '__main__':
     if not filerecord or config.setter == 'no':
         _logger.info('nothing to set')
     else:
-        pass #set wallpaper
+        s = setter.get(config.setter)()
+        _logger.info('setting wallpaper %s', filerecord['local_file'])
+        s.set(filerecord['local_file'], config.setter_args)
+
     sysexit(0)
