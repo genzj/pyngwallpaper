@@ -186,7 +186,8 @@ if __name__ == '__main__':
     load_history()
     filerecord = download_wallpaper(config)
 
-    save_history(filerecord)
+    if filerecord:
+        save_history(filerecord)
     if not filerecord or config.setter == 'no':
         _logger.info('nothing to set')
     else:
