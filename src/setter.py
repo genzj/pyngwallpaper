@@ -6,12 +6,9 @@ import os.path
 import glob
 from importlib import import_module
 
-loglevel = log.INFO
-
 class WallpaperSetter:
     def __init__(self):
         self._logger = log.getChild(self.__class__.__name__)
-        self._logger.setLevel(loglevel)
 
     def set(self, path, args):
         raise NotImplementedError()
@@ -77,7 +74,6 @@ class WallpaperSetterFactory:
 
 def load_ext_setters(path):
     logger = log.getChild('load_ext_setters')
-    logger.setLevel(loglevel)
     for i in glob.iglob(os.path.join(path, '*setter.py')):
         if os.path.basename(i) == 'setter.py': continue
         logger.debug('"%s" seems like a setter', i)
