@@ -1,4 +1,4 @@
-# PyNgWallpaper
+# PyNgWallpaper - Coolest Wallpapers
 
 ### What pyngwallpaper does
 
@@ -35,13 +35,13 @@ You can also create a shortcut by yourself, or add arguments to it.
 1.  Read and parse National Geographic photography *Photo of Today* [website](http://photography.nationalgeographic.com/photography/photo-of-the-day/)
 
 1.  If there is a wallpaper download link:
-    * if both its URL and target file name are same as last downloaded photo's, exit without error
-    * download it to **specified** folder
+    * if both its URL and target file name are same as last downloaded photos', exit without error
+    * download it to the **specified** folder
     * record the downloading URL, location of saved photo and downloading time in a text file, which locates in current user's personal folder
     * use it as wallpaper unless in **download-only** mode
     * exit
 
-1. If there isn't a wallpaper link, which means the photo may have  resolution improper to be wallpaper:
+1. If there isn't a wallpaper link, which means the photo may have  resolution improper to be a wallpaper:
     * if the **force** switch is on, do same as step 2
     * reduce **persistence** counter by 1; if it's 0, exit
     * go to the previous *Photo of The Day*, then do things again
